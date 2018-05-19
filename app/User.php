@@ -3,8 +3,8 @@
 namespace App;
 
 use Hash;
-use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
@@ -16,7 +16,9 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name',
+        'email',
+        'password',
     ];
 
     /**
@@ -25,13 +27,14 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'password',
+        'remember_token',
     ];
 
     /**
      * Automatically creates hash for the user password.
      *
-     * @param  string  $value
+     * @param  string $value
      * @return void
      */
     public function setPasswordAttribute($value)
@@ -42,18 +45,7 @@ class User extends Authenticatable
     public function books()
     {
         return $this->hasMany('App\Book');
-    }    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+    }
+
+
 }

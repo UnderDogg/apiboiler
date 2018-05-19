@@ -2,92 +2,94 @@
 
 namespace App\Api\V1\Controllers;
 
-use Illuminate\Http\Request;
-
-use JWTAuth;
 use App\Book;
-use Dingo\Api\Routing\Helpers;
 use App\Http\Controllers\Controller;
+use Dingo\Api\Routing\Helpers;
+use Illuminate\Http\Request;
+use JWTAuth;
 
 
 class BookController extends Controller
 {
-  use Helpers;
+    use Helpers;
 
-  
-public function index()
-{
-    $currentUser = JWTAuth::parseToken()->authenticate();
-    return $currentUser
-        ->books()
-        ->orderBy('created_at', 'DESC')
-        ->get()
-        ->toArray();
-}  
-  
-  
-  
-  
-  public function store(Request $request)
-{
-    $currentUser = JWTAuth::parseToken()->authenticate();
 
-    $book = new Book;
+    public function index()
+    {
+        $currentUser = JWTAuth::parseToken()->authenticate();
+        return $currentUser
+            ->books()
+            ->orderBy('created_at', 'DESC')
+            ->get()
+            ->toArray();
+    }
 
-    $book->title = $request->get('title');
-    $book->author_name = $request->get('author_name');
-    $book->pages_count = $request->get('pages_count');
 
-    if($currentUser->books()->save($book))
-        return $this->response->created();
-    else
-        return $this->response->error('could_not_create_book', 500);
-}
-  
-  
-  public function show($id)
-{
-    $currentUser = JWTAuth::parseToken()->authenticate();
+    public function store(Request $request)
+    {
+        $currentUser = JWTAuth::parseToken()->authenticate();
 
-    $book = $currentUser->books()->find($id);
+        $book = new Book;
 
-    if(!$book)
-        throw new NotFoundHttpException; 
+        $book->title = $request->get('title');
+        $book->author_name = $request->get('author_name');
+        $book->pages_count = $request->get('pages_count');
 
-    return $book;
-}
+        if ($currentUser->books()->save($book)) {
+            return $this->response->created();
+        } else {
+            return $this->response->error('could_not_create_book', 500);
+        }
+    }
 
-public function update(Request $request, $id)
-{
-    $currentUser = JWTAuth::parseToken()->authenticate();
 
-    $book = $currentUser->books()->find($id);
-    if(!$book)
-        throw new NotFoundHttpException;
+    public function show($id)
+    {
+        $currentUser = JWTAuth::parseToken()->authenticate();
 
-    $book->fill($request->all());
+        $book = $currentUser->books()->find($id);
 
-    if($book->save())
-        return $this->response->noContent();
-    else
-        return $this->response->error('could_not_update_book', 500);
-}
+        if (!$book) {
+            throw new NotFoundHttpException;
+        }
 
-public function destroy($id)
-{
-    $currentUser = JWTAuth::parseToken()->authenticate();
+        return $book;
+    }
 
-    $book = $currentUser->books()->find($id);
+    public function update(Request $request, $id)
+    {
+        $currentUser = JWTAuth::parseToken()->authenticate();
 
-    if(!$book)
-        throw new NotFoundHttpException;
+        $book = $currentUser->books()->find($id);
+        if (!$book) {
+            throw new NotFoundHttpException;
+        }
 
-    if($book->delete())
-        return $this->response->noContent();
-    else
-        return $this->response->error('could_not_delete_book', 500);
-}
+        $book->fill($request->all());
 
-  
-  
+        if ($book->save()) {
+            return $this->response->noContent();
+        } else {
+            return $this->response->error('could_not_update_book', 500);
+        }
+    }
+
+    public function destroy($id)
+    {
+        $currentUser = JWTAuth::parseToken()->authenticate();
+
+        $book = $currentUser->books()->find($id);
+
+        if (!$book) {
+            throw new NotFoundHttpException;
+        }
+
+        if ($book->delete()) {
+            return $this->response->noContent();
+        } else {
+            return $this->response->error('could_not_delete_book', 500);
+        }
+    }
+
+
 }

@@ -2,8 +2,8 @@
 
 namespace Modules\Books\Providers;
 
-use Illuminate\Support\ServiceProvider;
 use Illuminate\Database\Eloquent\Factory;
+use Illuminate\Support\ServiceProvider;
 
 class BooksServiceProvider extends ServiceProvider
 {
@@ -28,13 +28,19 @@ class BooksServiceProvider extends ServiceProvider
     }
 
     /**
-     * Register the service provider.
+     * Register translations.
      *
      * @return void
      */
-    public function register()
+    public function registerTranslations()
     {
-        //
+        $langPath = resource_path('lang/modules/books');
+
+        if (is_dir($langPath)) {
+            $this->loadTranslationsFrom($langPath, 'books');
+        } else {
+            $this->loadTranslationsFrom(__DIR__ . '/../Resources/lang', 'books');
+        }
     }
 
     /**
@@ -45,10 +51,10 @@ class BooksServiceProvider extends ServiceProvider
     protected function registerConfig()
     {
         $this->publishes([
-            __DIR__.'/../Config/config.php' => config_path('books.php'),
+            __DIR__ . '/../Config/config.php' => config_path('books.php'),
         ], 'config');
         $this->mergeConfigFrom(
-            __DIR__.'/../Config/config.php', 'books'
+            __DIR__ . '/../Config/config.php', 'books'
         );
     }
 
@@ -61,7 +67,7 @@ class BooksServiceProvider extends ServiceProvider
     {
         $viewPath = resource_path('views/modules/books');
 
-        $sourcePath = __DIR__.'/../Resources/views';
+        $sourcePath = __DIR__ . '/../Resources/views';
 
         $this->publishes([
             $sourcePath => $viewPath
@@ -73,30 +79,24 @@ class BooksServiceProvider extends ServiceProvider
     }
 
     /**
-     * Register translations.
-     *
-     * @return void
-     */
-    public function registerTranslations()
-    {
-        $langPath = resource_path('lang/modules/books');
-
-        if (is_dir($langPath)) {
-            $this->loadTranslationsFrom($langPath, 'books');
-        } else {
-            $this->loadTranslationsFrom(__DIR__ .'/../Resources/lang', 'books');
-        }
-    }
-
-    /**
      * Register an additional directory of factories.
      * @source https://github.com/sebastiaanluca/laravel-resource-flow/blob/develop/src/Modules/ModuleServiceProvider.php#L66
      */
     public function registerFactories()
     {
-        if (! app()->environment('production')) {
+        if (!app()->environment('production')) {
             app(Factory::class)->load(__DIR__ . '/Database/factories');
         }
+    }
+
+    /**
+     * Register the service provider.
+     *
+     * @return void
+     */
+    public function register()
+    {
+        //
     }
 
     /**

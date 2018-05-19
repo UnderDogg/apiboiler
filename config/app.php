@@ -174,7 +174,6 @@ return [
         Nwidart\Modules\LaravelModulesServiceProvider::class,
 
 
-
         /*
          * Application Service Providers...
          */
