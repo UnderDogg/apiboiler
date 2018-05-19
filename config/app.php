@@ -171,6 +171,10 @@ return [
         Dingo\Api\Provider\LaravelServiceProvider::class,
         Barryvdh\Cors\ServiceProvider::class,
 
+        Nwidart\Modules\LaravelModulesServiceProvider::class,
+
+
+
         /*
          * Application Service Providers...
          */
@@ -232,7 +236,11 @@ return [
          * Package Facades...
          */
         'JWTAuth' => Tymon\JWTAuth\Facades\JWTAuth::class,
-        'JWTFactory' => 'Tymon\JWTAuth\Facades\JWTFactory'
+        'JWTFactory' => Tymon\JWTAuth\Facades\JWTFactory::class,
+
+
+        'Module' => Nwidart\Modules\Facades\Module::class,
+
 
     ],
 
